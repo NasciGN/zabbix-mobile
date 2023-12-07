@@ -34,12 +34,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
     for (var problem in problems) {
       count++;
+      String formatDurantion = formatDuration(problem['clock']);
       final trigger = await apiIncident.getTrigger(problem['objectid']);
       HostEvent host = HostEvent(
           hostID: trigger['hosts'][0]["hostid"],
           hostname: trigger['hosts'][0]["host"],
           eventName: trigger['description'],
-          clock: problem['clock'],
+          clock: formatDurantion,
           severity: problem['severity']);
 
       hostsList.add(host);
@@ -59,10 +60,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
         padding: const EdgeInsets.all(defaultpd * 2),
         child: Column(
           children: [
-            Align(
+            const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Incidentes $count',
+                'Incidentes',
                 style: TextStyle(
                     fontSize: defaultpd * 4.5,
                     fontWeight: FontWeight.bold,
@@ -102,7 +103,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: defaultpd * 2),
                             ),
-                            Text(actualHost.eventName)
+                            Text(actualHost.eventName),
+                            const Spacer(),
+                            Text(
+                              actualHost.clock,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )
                           ],
                         ),
                       ),
