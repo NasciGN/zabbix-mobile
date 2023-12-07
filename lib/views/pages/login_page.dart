@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final _controllerUser = TextEditingController();
   final _controllerPass = TextEditingController();
 
-  UserAPI userapi = UserAPI();
+  final UserAPI userapi = Get.find<UserAPI>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                               });
                               await userapi.login(_controllerUser.text,
                                   _controllerPass.text, _controllerUrl.text);
-                              print(userapi.apicode);
+
                               Get.offNamed("/home_dashboard");
                               setState(() {
                                 _isLoading = false;

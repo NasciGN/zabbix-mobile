@@ -1,5 +1,5 @@
 class Host {
-  String id, host, name, status, inventoryMode;
+  String id, host, name, status, inventoryMode, activeAvailable;
 
   Host({
     required this.id,
@@ -7,6 +7,7 @@ class Host {
     this.name = '',
     required this.status,
     required this.inventoryMode,
+    required this.activeAvailable,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,6 +17,7 @@ class Host {
       'name': name,
       'status': status,
       'inventory_mode': inventoryMode,
+      'active_available': activeAvailable,
     };
   }
 
@@ -27,9 +29,11 @@ class Host {
         name: json['name'] ?? json['host'],
         status: json['status'],
         inventoryMode: json['inventory_mode'],
+        activeAvailable: json['active_available'],
       );
     } else {
-      return Host(id: '', host: '', status: '', inventoryMode: '');
+      return Host(
+          id: '', host: '', status: '', inventoryMode: '', activeAvailable: '');
     }
   }
 }

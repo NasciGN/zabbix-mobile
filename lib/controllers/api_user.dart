@@ -4,17 +4,20 @@ import 'package:get/get.dart';
 
 class UserAPI extends GetxController {
   RxString apicode = ''.obs;
+  RxString url = ''.obs;
 
-  Future<void> login(String user, String pass, String url) async {
+  Future<void> login(String user, String pass, String urlSite) async {
+    String urlAPI = 'http://$urlSite/api_jsonrpc.php';
     Map<String, dynamic> requestBody = {
       "jsonrpc": "2.0",
       "method": "user.login",
-      "params": {"user": user, "password": pass},
+      "params": {"username": "Admin", "password": "zabbix"},
       "id": 1
     };
-
-    String result = await jsonStringRequest(requestBody, url);
+    String result = await jsonStringRequest(requestBody, urlAPI);
     apicode.value = result;
+    url.value = urlAPI;
+    update();
   }
 
   Future<String> jsonStringRequest(jsonBody, String url) async {
@@ -27,6 +30,7 @@ class UserAPI extends GetxController {
     );
 
     if (response.statusCode == 200) {
+      print("Resposta: ${response.body}");
       return jsonDecode(response.body)["result"].toString();
     } else {
       return '';
