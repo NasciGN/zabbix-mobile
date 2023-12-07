@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:zabbix_mobile/controllers/api_host.dart';
 import 'package:zabbix_mobile/controllers/api_incident.dart';
 import 'package:zabbix_mobile/models/Problem.dart';
@@ -60,16 +62,28 @@ class _HomeDashboardState extends State<HomeDashboard> {
         padding: const EdgeInsets.all(defaultpd * 2),
         child: Column(
           children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Incidentes',
-                style: TextStyle(
-                    fontSize: defaultpd * 4.5,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Row(
+                  children: [
+                    const Text(
+                      'Incidentes',
+                      style: TextStyle(
+                          fontSize: defaultpd * 4.5,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () {
+                          Get.offNamed('/host_search');
+                        },
+                        icon: const FaIcon(
+                          Icons.search,
+                          color: Colors.white,
+                        )),
+                  ],
+                )),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => _handleRefresh(),

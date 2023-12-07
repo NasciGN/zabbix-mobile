@@ -11,7 +11,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   final _controllerUrl = TextEditingController();
   final _controllerUser = TextEditingController();
@@ -46,9 +45,14 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextFormField(
                           controller: _controllerUser,
+                          decoration:
+                              const InputDecoration(label: Text('Usuário')),
                         ),
                         TextFormField(
                           controller: _controllerPass,
+                          obscureText: true,
+                          decoration:
+                              const InputDecoration(label: Text('Senha')),
                         ),
                         const SizedBox(
                           height: 20,
@@ -70,16 +74,12 @@ class _LoginPageState extends State<LoginPage> {
                         GestureDetector(
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                _isLoading = true;
-                              });
+                              setState(() {});
                               await userapi.login(_controllerUser.text,
                                   _controllerPass.text, _controllerUrl.text);
 
                               Get.offNamed("/home_dashboard");
-                              setState(() {
-                                _isLoading = false;
-                              });
+                              setState(() {});
                             }
                           },
                           child: Container(
