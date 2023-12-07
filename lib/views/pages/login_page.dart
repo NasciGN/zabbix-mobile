@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: defaultpd * 2),
+          padding: const EdgeInsets.symmetric(vertical: defaultpd * 2),
           child: Padding(
             padding: const EdgeInsets.only(
                 left: defaultpd * 5,
@@ -120,7 +120,6 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const InputDecoration(labelText: 'URL do Servidor'),
               ),
               const SizedBox(height: 10),
-              // Adicione mais campos conforme necessário (por exemplo, usuário, senha, etc.)
             ],
           ),
           actions: [
@@ -132,9 +131,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Adicione a lógica para salvar os dados do servidor
-                // Pode ser armazenado em um serviço ou em algum lugar apropriado
-                // Por exemplo, _salvarDadosServidor(_controllerUrl.text, ...);
                 Navigator.of(context).pop();
               },
               child: const Text('Salvar'),

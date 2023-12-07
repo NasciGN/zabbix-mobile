@@ -26,9 +26,7 @@ class HostAPI {
     );
 
     final responseBody = jsonDecode(response.body);
-    print(responseBody);
     final hosts = responseBody['result'];
-    print('Hosts: $hosts');
     return hosts;
   }
 

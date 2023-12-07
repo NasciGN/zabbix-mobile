@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zabbix_mobile/controllers/api_controller.dart';
 import 'package:zabbix_mobile/controllers/api_host.dart';
-import 'package:zabbix_mobile/models/host.dart';
+import 'package:zabbix_mobile/controllers/api_incident.dart';
+import 'package:zabbix_mobile/models/Problem.dart';
+import 'package:zabbix_mobile/models/teste.dart';
 import 'package:zabbix_mobile/sources/constants.dart';
 
 class HomeDashboard extends StatefulWidget {
@@ -13,55 +14,101 @@ class HomeDashboard extends StatefulWidget {
 
 class _HomeDashboardState extends State<HomeDashboard> {
   HostAPI apiHost = HostAPI();
-  ControllerAPI apiController = ControllerAPI();
+  IncidentAPI apiIncident = IncidentAPI();
 
-  // Lista para armazenar os objetos Host
-  List<Host> hostsList = [];
+  List<HostEvent> hostsList = [];
+  List<Problem> allIncidents = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchIncidents();
+  }
+
+  int count = 0;
+  Future<void> fetchIncidents() async {
+    count = 0;
+    List<dynamic> problems = await apiIncident.getProblems();
+    allIncidents.clear();
+    hostsList.clear();
+
+    for (var problem in problems) {
+      count++;
+      final trigger = await apiIncident.getTrigger(problem['objectid']);
+      HostEvent host = HostEvent(
+          hostID: trigger['hosts'][0]["hostid"],
+          hostname: trigger['hosts'][0]["host"],
+          eventName: trigger['description'],
+          clock: problem['clock'],
+          severity: problem['severity']);
+
+      hostsList.add(host);
+    }
+    setState(() {});
+  }
+
+  Future<void> _handleRefresh() async {
+    await fetchIncidents();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0x0E1012),
       body: Padding(
-        padding: EdgeInsets.all(defaultpd * 2),
+        padding: const EdgeInsets.all(defaultpd * 2),
         child: Column(
           children: [
-            const Text(
-              'Hosts',
-              style: TextStyle(
-                fontSize: defaultpd * 4.5,
-                fontWeight: FontWeight.bold,
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'Incidentes $count',
+                style: TextStyle(
+                    fontSize: defaultpd * 4.5,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                List<dynamic> hosts = await apiHost.getHosts("CONTINENTAL");
-
-                // Limpa a lista antes de adicionar os novos itens
-                hostsList.clear();
-
-                // Adiciona os objetos Host à lista
-                for (var hostData in hosts) {
-                  Host host = Host.fromJson(hostData);
-                  hostsList.add(host);
-                }
-
-                // Atualiza a interface do usuário
-                setState(() {});
-              },
-              child: Text('Teste para chamada da API'),
-            ),
-            // Exibe a lista de hosts usando um ListView
             Expanded(
-              child: ListView.builder(
-                itemCount: hostsList.length,
-                itemBuilder: (context, index) {
-                  Host host = hostsList[index];
-                  return ListTile(
-                    title: Text(host.name),
-                    subtitle: Text('Available: ${host.activeAvailable}'),
-                    // Adicione mais detalhes conforme necessário
-                  );
-                },
+              child: RefreshIndicator(
+                onRefresh: () => _handleRefresh(),
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: hostsList.length,
+                  itemBuilder: (context, index) {
+                    HostEvent actualHost = hostsList[index];
+                    Color backgroundColor =
+                        mapSeverityToColor(actualHost.severity);
+                    return GestureDetector(
+                      onTap: () {},
+                      onLongPress: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: defaultpd * 2, horizontal: defaultpd),
+                        width: double.infinity,
+                        height: defaultpd * 13,
+                        margin: const EdgeInsets.symmetric(vertical: defaultpd),
+                        decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(defaultpd),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              actualHost.hostname,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: defaultpd * 2),
+                            ),
+                            Text(actualHost.eventName)
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],

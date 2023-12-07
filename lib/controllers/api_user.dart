@@ -11,12 +11,13 @@ class UserAPI extends GetxController {
     Map<String, dynamic> requestBody = {
       "jsonrpc": "2.0",
       "method": "user.login",
-      "params": {"username": "Admin", "password": "zabbix"},
+      "params": {"username": user, "password": pass},
       "id": 1
     };
     String result = await jsonStringRequest(requestBody, urlAPI);
     apicode.value = result;
     url.value = urlAPI;
+    print(apicode.value);
     update();
   }
 
@@ -30,7 +31,6 @@ class UserAPI extends GetxController {
     );
 
     if (response.statusCode == 200) {
-      print("Resposta: ${response.body}");
       return jsonDecode(response.body)["result"].toString();
     } else {
       return '';
