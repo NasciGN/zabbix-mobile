@@ -39,7 +39,7 @@ class HostCard extends StatelessWidget {
             const SizedBox(
               height: defaultpd,
             ),
-            host.activeAvailable == '0'
+            int.tryParse(host.activeAvailable) == 0
                 ? Container(
                     width: defaultpd * 10,
                     height: defaultpd * 4,
