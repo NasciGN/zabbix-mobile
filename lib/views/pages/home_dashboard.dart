@@ -6,6 +6,7 @@ import 'package:zabbix_mobile/controllers/api_incident.dart';
 import 'package:zabbix_mobile/models/Problem.dart';
 import 'package:zabbix_mobile/models/teste.dart';
 import 'package:zabbix_mobile/views/sources/constants.dart';
+import 'package:zabbix_mobile/views/widgets/incident_card.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({Key? key}) : super(key: key);
@@ -94,40 +95,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
                     HostEvent actualHost = hostsList[index];
                     Color backgroundColor =
                         mapSeverityToColor(actualHost.severity);
-                    return GestureDetector(
-                      onTap: () {},
-                      onLongPress: () {},
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: defaultpd * 2, horizontal: defaultpd),
-                        width: double.infinity,
-                        height: defaultpd * 13,
-                        margin: const EdgeInsets.symmetric(vertical: defaultpd),
-                        decoration: BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(defaultpd),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              actualHost.hostname,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: defaultpd * 2),
-                            ),
-                            Text(actualHost.eventName),
-                            const Spacer(),
-                            Text(
-                              actualHost.clock,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
+                    return IncidentCard(
+                        backgroundColor: backgroundColor,
+                        actualHost: actualHost);
                   },
                 ),
               ),
