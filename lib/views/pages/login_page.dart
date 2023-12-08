@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zabbix_mobile/controllers/api_user.dart';
-import 'package:zabbix_mobile/sources/constants.dart';
+import 'package:zabbix_mobile/views/sources/constants.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

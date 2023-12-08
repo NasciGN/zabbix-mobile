@@ -5,7 +5,7 @@ import 'package:zabbix_mobile/controllers/api_host.dart';
 import 'package:zabbix_mobile/controllers/api_incident.dart';
 import 'package:zabbix_mobile/models/Problem.dart';
 import 'package:zabbix_mobile/models/teste.dart';
-import 'package:zabbix_mobile/sources/constants.dart';
+import 'package:zabbix_mobile/views/sources/constants.dart';
 
 class HomeDashboard extends StatefulWidget {
   const HomeDashboard({Key? key}) : super(key: key);
